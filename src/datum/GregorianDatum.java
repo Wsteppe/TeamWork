@@ -1,5 +1,4 @@
 package datum;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -209,19 +208,19 @@ public static void main(String[] args) throws Exception
 	public String getDatumInAmerikaansFormaat() throws Exception
 	{
 		String IntToStr; 
-		if(cal.MONTH <9)
-		{IntToStr = "0"+Integer.toString(cal.MONTH+1)+"/"+Integer.toString(cal.DAY_OF_MONTH)+"/"+Integer.toString(cal.YEAR);}
+		if(cal.get(Calendar.MONTH)<9)
+		{IntToStr = "0"+Integer.toString(cal.get(Calendar.MONTH)+1)+"/"+Integer.toString(cal.get(Calendar.DAY_OF_MONTH))+"/"+Integer.toString(cal.get(Calendar.YEAR));}
 		else
-		{IntToStr = Integer.toString(cal.MONTH+1)+"/"+Integer.toString(cal.DAY_OF_MONTH)+"/"+Integer.toString(cal.YEAR);}
+		{IntToStr = Integer.toString(cal.get(Calendar.MONTH)+1)+"/"+Integer.toString(cal.get(Calendar.DAY_OF_MONTH))+"/"+Integer.toString(cal.YEAR);}
 		return IntToStr;
 	} 
 	public String getDatumInEuropeesFormaat() throws Exception
 	{
 		String IntToStr;
-		if(cal.MONTH <9)
-		{IntToStr = Integer.toString(cal.DAY_OF_MONTH)+"/"+"0"+Integer.toString(cal.MONTH+1)+"/"+Integer.toString(cal.YEAR);}
+		if(cal.get(Calendar.MONTH)<9)
+		{IntToStr = Integer.toString(cal.get(Calendar.DAY_OF_MONTH))+"/"+"0"+Integer.toString(cal.get(Calendar.MONTH)+1)+"/"+Integer.toString(cal.get(Calendar.YEAR));}
 		else
-		{IntToStr = Integer.toString(cal.DAY_OF_MONTH)+"/"+Integer.toString(cal.MONTH+1)+"/"+Integer.toString(cal.YEAR);}
+		{IntToStr = Integer.toString(cal.get(Calendar.DAY_OF_MONTH))+"/"+Integer.toString(cal.get(Calendar.MONTH)+1)+"/"+Integer.toString(cal.get(Calendar.YEAR));}
 		return IntToStr;
 	}
 	
@@ -319,7 +318,7 @@ public static void main(String[] args) throws Exception
 	}
 	public void VeranderDatum(int verandering) throws Exception
 	{
-		if(setDatum(verandering,cal.MONTH+1,cal.YEAR))
+		if(setDatum(verandering,cal.get(Calendar.MONTH)+1,cal.get(Calendar.YEAR)))
 		{
 			cal.set(Calendar.DAY_OF_MONTH,verandering);
 			System.out.println("Verwerkte datum : "+getDatumInEuropeesFormaat());
@@ -331,9 +330,9 @@ public static void main(String[] args) throws Exception
 	}
 	public GregorianDatum VeranderDatumNO(int verandering) throws Exception
 	{
-		if(setDatum(verandering,cal.MONTH+1,cal.YEAR))
+		if(setDatum(verandering,cal.get(Calendar.MONTH)+1,cal.get(Calendar.YEAR)))
 		{
-			GregorianDatum dat = new GregorianDatum(verandering,cal.MONTH,cal.YEAR);
+			GregorianDatum dat = new GregorianDatum(verandering,cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH));
 			return (dat);
 		}
 		else
@@ -345,7 +344,7 @@ public static void main(String[] args) throws Exception
 	public String NaarString() throws Exception
 	{
 		String maandstring = null;
-		switch(cal.MONTH+1)
+		switch(cal.get(Calendar.MONTH)+1)
 		{
 		case 1: maandstring = "januari";
 			break;
@@ -373,18 +372,7 @@ public static void main(String[] args) throws Exception
 			break;
 			
 		}
-		return cal.DAY_OF_MONTH +" "+ maandstring +" "+ cal.YEAR;
+		return cal.get(Calendar.DAY_OF_MONTH) +" "+ maandstring +" "+ cal.get(Calendar.YEAR);
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 }
