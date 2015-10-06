@@ -288,7 +288,55 @@ public class CalendarDatum {
 		}
 		return test;
 	}
-	
+	//Methode kijkt of parameter hetzelfde is als datum
+	public Boolean equals(Date d1) throws Exception
+	{
+		Boolean test = false;
+		try{
+			Date d2 = simpleformat.parse(getDatumInEuropeesFormaat());	
+			Calendar calendar1 = Calendar.getInstance();
+		    Calendar calendar2 = Calendar.getInstance();
+		    calendar1.setTime(d1);
+		    calendar2.setTime(d2);	
+		if(calendar1.equals(calendar2))
+		{
+			test = true;
+		}
+		else
+		{
+			test = false;
+		}
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return test;
+	}
+	//Methode vergelijkt parameter en datum
+	public int compareTo(Date d1) throws Exception
+	{
+		int result = 0;
+		try{
+		Date d2 = simpleformat.parse(getDatumInEuropeesFormaat());	
+		Calendar calendar1 = Calendar.getInstance();
+	    Calendar calendar2 = Calendar.getInstance();
+	    calendar1.setTime(d1);
+	    calendar2.setTime(d2);
+		String s1 = getDatumInEuropeesFormaat();
+		String s2 = null;
+		if(this.maand <10)
+		{s2 = this.dag+"/"+"0"+this.maand+"/"+this.jaar;}
+		else
+		{s2 = this.dag+"/"+this.maand+"/"+this.jaar;}				
+		result = s1.compareTo(s2);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return result;
+		
+	}
 	
 	//Methode bepaalt het verschil in dagen tusssen parameter en huidige datum
 	public int verschilInDagen(Date d1) throws Exception

@@ -251,8 +251,8 @@ public class GregorianDatum {
 		try{
 		Calendar calendar1 = Calendar.getInstance();
 		calendar1.setTime(d1);
-		Calendar calendar2 = new GregorianCalendar();
-    	if(cal.before(calendar2))
+		Calendar calendar2 = cal;
+    	if(calendar1.before(calendar2))
     	{
     		test = true;
     	}
@@ -267,7 +267,51 @@ public class GregorianDatum {
 		}
     	return test;
 	}
-	
+	//Methode kijkt of parameter hetzelfde is als datum
+	public Boolean equals(Date d1) throws Exception
+	{
+		Boolean test = false;
+		try{
+		Calendar calendar1 = Calendar.getInstance();
+		calendar1.setTime(d1);
+		Calendar calendar2 = cal;
+		if(calendar1.get(Calendar.DAY_OF_YEAR) == calendar2.get(Calendar.DAY_OF_YEAR) && calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR))
+		{
+			test = true;
+		}
+		else
+		{
+			test = false;
+		}
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return test;
+	}
+	//Methode vergelijkt parameter en datum
+	public int compareTo(Date d1) throws Exception
+	{
+		int result = 0;
+		try{
+		Calendar calendar1 = Calendar.getInstance();
+		calendar1.setTime(d1);
+		String s1 = getDatumInEuropeesFormaat();
+		String s2 = null;
+		if(cal.get(Calendar.MONTH)<9)
+		{s2 = calendar1.get(Calendar.DAY_OF_MONTH)+"/"+"0"+(calendar1.get(Calendar.MONTH)+1)+"/"+calendar1.get(Calendar.YEAR);}
+		else
+		{s2 = calendar1.get(Calendar.DAY_OF_MONTH)+"/"+(calendar1.get(Calendar.MONTH)+1)+"/"+calendar1.get(Calendar.YEAR);}
+		
+		result = s1.compareTo(s2);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return result;
+		
+	}
 	
 	//Methode bepaalt het verschil in dagen tusssen parameter en huidige datum
 	public int verschilInDagen(Date d1) throws Exception
@@ -276,7 +320,7 @@ public class GregorianDatum {
 		try{
 		Calendar calendar1 = Calendar.getInstance();
 		calendar1.setTime(d1);
-		Calendar calendar2 = new GregorianCalendar();
+		Calendar calendar2 = cal;
     	if(calendar1.before(calendar2))
     	{
     		dagen = 0;  
@@ -309,7 +353,7 @@ public class GregorianDatum {
 		try{
 		Calendar calendar1 = Calendar.getInstance();
 		calendar1.setTime(d1);
-		Calendar calendar2 = new GregorianCalendar();
+		Calendar calendar2 = cal;
     	if(calendar1.before(calendar2))
     	{
     		maanden = 0;  
@@ -342,7 +386,7 @@ public class GregorianDatum {
 		try{
 		Calendar calendar1 = Calendar.getInstance();
 		calendar1.setTime(d1);
-		Calendar calendar2 = new GregorianCalendar();
+		Calendar calendar2 = cal;
     	if(calendar1.before(calendar2))
     	{
     		jaren = 0;  
