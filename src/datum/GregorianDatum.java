@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class GregorianDatum {
-	
+	//test
 	SimpleDateFormat simpleformat = new SimpleDateFormat("dd/MM/yyyy");
 	Calendar cal = new GregorianCalendar();
 

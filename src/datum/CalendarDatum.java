@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class CalendarDatum {
-	
+	//test
 	SimpleDateFormat simpleformat = new SimpleDateFormat("dd/MM/yyyy");
 	private int dag, maand, jaar;
 	
