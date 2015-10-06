@@ -3,115 +3,21 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Scanner;
 
-public class GregorianDatum 
-{
-public static void main(String[] args) throws Exception
-	
-	{
-		GregorianDatum dat = null;
-		Scanner scanner = new Scanner(System.in);
-		String menukeuze = null;
-		String menukeuze2 = null;
-		
-		CalenderDatum.EersteMenu();
-		menukeuze = scanner.nextLine();
-
-		switch(menukeuze)
-		{
-		case "1": 
-			dat = new GregorianDatum();
-			System.out.println("Gekozen datum: "+dat.getDatumInEuropeesFormaat());
-			break;
-			
-		case "2": 
-			System.out.println("Kies een datum (DD/MM/YYYY): ");
-		  	String case2datum = scanner.nextLine();
-		  	SimpleDateFormat simpleformat = new SimpleDateFormat("dd/MM/yyyy");
-			Date case2datum2 = (Date) simpleformat.parse(case2datum);
-		  	dat = new GregorianDatum(case2datum2);
-			break;
-			
-		case "3":
-			int een,twee,drie;
-			System.out.println("Kies 3 integers: ");
-			een = scanner.nextInt();
-			twee = scanner.nextInt();
-			drie = scanner.nextInt();
-			dat = new GregorianDatum(een,twee,drie);
-			break;
-			
-		case "4": 
-			System.out.println("Kies een datum (DD/MM/YYYY): ");
-		  	String menudatum2 = scanner.nextLine();
-		  	dat = new GregorianDatum(menudatum2);
-			break;
-		
-		case "5":
-			break;
-		default: 
-			break;
-		}
-		if(menukeuze!="5")
-		{			
-			CalenderDatum.TweedeMenu();
-			menukeuze2 = scanner.nextLine();
-			switch(menukeuze2)
-			{
-			case "1": dat.KleinerDan();
-				break;
-			case "2": System.out.println("Verschil in dagen: "+dat.VerschilInDagen());
-				break;
-			case "3": System.out.println("Verschil in maanden: "+dat.VerschilInMaanden());
-				break;
-			case "4": System.out.println("Verschil in jaren: "+dat.VerschilInJaren());
-				break;
-			case "5": System.out.print("Kies een nieuw dag aantal: ");
-					  int verandering = scanner.nextInt();
-					  dat.VeranderDatum(verandering);
-				break;
-			case "6": System.out.print("Kies een nieuw dag aantal: ");
-					  int verandering2 = scanner.nextInt();
-					  System.out.println("Verwerkte datum : "+dat.VeranderDatumNO(verandering2).getDatumInEuropeesFormaat());
-				break;
-			case "7": System.out.println("Verwerkte datum : "+dat.getDatumInAmerikaansFormaat());
-				break;
-			case "8": System.out.println("Verwerkte datum : "+dat.getDatumInEuropeesFormaat());
-				break;
-			case "9": System.out.println("Verwerkte datum : "+dat.NaarString());
-				break;
-			case "10":
-				break;
-			default: 
-				break;
-			}
-			System.out.println("\n\n\nDruk op een toets");
-			scanner.nextLine();
-		}			
-		scanner.close();
-	}
+public class GregorianDatum {
 	
 	SimpleDateFormat simpleformat = new SimpleDateFormat("dd/MM/yyyy");
 	Calendar cal = new GregorianCalendar();
 
+	//Constructor zonder parameters
 	public GregorianDatum() throws Exception
 {
-	Date datum1 = new Date();
-	String converteddate = simpleformat.format(datum1);
-	String[] parts = converteddate.split("/");
-	int dag1 = Integer.parseInt(parts[0]);
-	int maand1 = Integer.parseInt(parts[1]);
-	int jaar1 = Integer.parseInt(parts[2]);
-	if(setDatum(dag1,maand1,jaar1))
-	{
-		cal.set(Calendar.YEAR, jaar1);
-		cal.set(Calendar.MONTH, maand1-1);
-		cal.set(Calendar.DAY_OF_MONTH,dag1);
-	}		
+	cal = new GregorianCalendar();	
 }
+	//Constructor met een datum object als parameter
 	public GregorianDatum(Date datum) throws Exception
 {
+	try{
 	Date datum2 = datum;
 	String converteddate = simpleformat.format(datum2);
 	String[] parts = converteddate.split("/");
@@ -122,20 +28,32 @@ public static void main(String[] args) throws Exception
 	{
 		cal.set(Calendar.YEAR, jaar1);
 		cal.set(Calendar.MONTH, maand1-1);
-		cal.set(Calendar.DAY_OF_MONTH,dag1);
+		cal.set(Calendar.DAY_OF_MONTH,dag1);		
 	}		
+	}catch(Exception e)
+	{
+		e.printStackTrace();
+	}
 }
+	//Constructor met int parameters dag maand en jaar
 	public GregorianDatum(int dag,int maand,int jaar) throws Exception
 {
+	try{
 	if(setDatum(dag, maand, jaar))
 	{
 		cal.set(Calendar.YEAR, jaar);
 		cal.set(Calendar.MONTH, maand-1);
 		cal.set(Calendar.DAY_OF_MONTH,dag);
-	}		
+	}	
+	}catch(Exception e)
+	{
+		e.printStackTrace();
+	}
 }
+	//Constructor met een string als parameter
 	public GregorianDatum(String datum1) throws Exception
 {
+	try{
 	String stringdatum = datum1;
 	String[] parts = stringdatum.split("/");
 	int dag1 = Integer.parseInt(parts[0]);
@@ -146,22 +64,37 @@ public static void main(String[] args) throws Exception
 		cal.set(Calendar.YEAR, jaar1);
 		cal.set(Calendar.MONTH, maand1-1);
 		cal.set(Calendar.DAY_OF_MONTH,dag1);
-	}		
+	}	
+	}catch(Exception e)
+	{
+		e.printStackTrace();
+	}
 }
 	
+	
+	//Methode voor geldige waarden te controleren
 	private Boolean setDatum(int dag,int maand,int jaar) throws Exception
 {
-	Boolean dagtest = (dag >= 1) && (dag <= DagenInMaand(maand,jaar));
+	Boolean test = false;
+	try{
+	Boolean dagtest = (dag >= 1) && (dag <= dagenInMaand(maand,jaar));
 	Boolean maandtest = (maand >= 1)&&(maand <= 12);
 	Boolean jaartest = (jaar >= 1700)&&(jaar <= 3000);
 	if(dagtest&&maandtest&&jaartest)
-	{return true;}
+	{test = true;}
 	else
-	{return false;}
+	{test = false;}
+	}catch(Exception e)
+	{
+		e.printStackTrace();
+	}
+	return test;
 }
-	private int DagenInMaand(int maand, int jaar) throws Exception
+	//Methode voor schrikkeljaren te controleren
+	private int dagenInMaand(int maand, int jaar) throws Exception
 {
-    int dagen_maand = 0;
+		int dagen_maand = 0;
+	try{	
     switch (maand) {
         case 1: dagen_maand = 31;
         break;
@@ -191,158 +124,89 @@ public static void main(String[] args) throws Exception
         	break;
         case 12: dagen_maand = 31;
             break;
-    }
-    return dagen_maand;
+    }   
+	}catch(Exception e)
+	{
+		e.printStackTrace();
+	}
+	return dagen_maand;
 }
-	
-    public static void EersteMenu() throws Exception
-	{
-		System.out.println("Eerste Menu:\n\n1: Datum wordt zelf gegenereerd\n2: Datum in een datum object\n3: Datum in 3 integers\n4: Datum als String\n5: Stop");		
-	}
-	public static void TweedeMenu() throws Exception
 
+	
+	//Get (dag) voor Test-unit
+	public int getDag()
 	{
-		System.out.println("Tweede Menu:\n\n1: Kleiner dan huidige datum\n2: Verschil in dagen\n3: Verschil in maanden\n4: Verschil in jaren\n5: Verander dag aantal\n6: Verander dag aantal met nieuw object\n7: Amerikaans Formaat\n8: Europees Formaat\n9: ToString\n10: Terug");		
+		return cal.get(Calendar.DAY_OF_MONTH);		
+	}
+	//Get (maand) voor Test-unit
+	public int getMaand()
+	{
+		return cal.get(Calendar.MONTH)+1;		
+	}
+	//Get (jaar) voor Test-unit
+	public int getJaar()
+	{
+		return cal.get(Calendar.YEAR);		
 	}
 	
+	
+	//Set (dag) voor Test-Unit
+	public void setDag(int verandering) throws Exception
+	{
+		if(setDatum(verandering,(cal.get(Calendar.MONTH)+1),cal.get(Calendar.YEAR)))
+			cal.set(Calendar.DAY_OF_MONTH,verandering);
+	}
+	//Set (maand) voor Test-Unit
+	public void setMaand(int verandering) throws Exception
+	{
+		if(setDatum(cal.get(Calendar.DAY_OF_MONTH),verandering,cal.get(Calendar.YEAR)))
+			cal.set(Calendar.MONTH,verandering);
+	}
+	//Set (jaar) voor Test-Unit
+	public void setJaar(int verandering) throws Exception
+	{
+		if(setDatum(cal.get(Calendar.DAY_OF_MONTH),(cal.get(Calendar.MONTH)+1),verandering))
+			cal.set(Calendar.YEAR,verandering);
+	}
+	
+	
+	//Methode voor datum in amerikaans formaat terug te geven
 	public String getDatumInAmerikaansFormaat() throws Exception
 	{
-		String IntToStr; 
+		String IntToStr = null;
+		try{
 		if(cal.get(Calendar.MONTH)<9)
-		{IntToStr = "0"+Integer.toString(cal.get(Calendar.MONTH)+1)+"/"+Integer.toString(cal.get(Calendar.DAY_OF_MONTH))+"/"+Integer.toString(cal.get(Calendar.YEAR));}
+		{IntToStr = "0"+(cal.get(Calendar.MONTH)+1)+"/"+cal.get(Calendar.DAY_OF_MONTH)+"/"+cal.get(Calendar.YEAR);}
 		else
-		{IntToStr = Integer.toString(cal.get(Calendar.MONTH)+1)+"/"+Integer.toString(cal.get(Calendar.DAY_OF_MONTH))+"/"+Integer.toString(cal.YEAR);}
+		{IntToStr = (cal.get(Calendar.MONTH)+1)+"/"+cal.get(Calendar.DAY_OF_MONTH)+"/"+cal.get(Calendar.YEAR);}
+		
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 		return IntToStr;
 	} 
+	//Methode voor datum in europees formaat terug te geven
 	public String getDatumInEuropeesFormaat() throws Exception
 	{
-		String IntToStr;
+		String IntToStr = null;
+		try{		
 		if(cal.get(Calendar.MONTH)<9)
-		{IntToStr = Integer.toString(cal.get(Calendar.DAY_OF_MONTH))+"/"+"0"+Integer.toString(cal.get(Calendar.MONTH)+1)+"/"+Integer.toString(cal.get(Calendar.YEAR));}
+		{IntToStr = cal.get(Calendar.DAY_OF_MONTH)+"/"+"0"+(cal.get(Calendar.MONTH)+1)+"/"+cal.get(Calendar.YEAR);}
 		else
-		{IntToStr = Integer.toString(cal.get(Calendar.DAY_OF_MONTH))+"/"+Integer.toString(cal.get(Calendar.MONTH)+1)+"/"+Integer.toString(cal.get(Calendar.YEAR));}
+		{IntToStr = cal.get(Calendar.DAY_OF_MONTH)+"/"+(cal.get(Calendar.MONTH)+1)+"/"+cal.get(Calendar.YEAR);}
+		return IntToStr;
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 		return IntToStr;
 	}
-	
-	public Boolean KleinerDan() throws Exception
+	//Methode voor datum met uitgeschreven maand terug te geven
+	public String toString()
 	{
-		Calendar calendar2 = new GregorianCalendar();
-    	if(cal.before(calendar2))
-    	{
-    		return true;
-    	}
-    	
-    	else
-    	{
-    		return false;
-    	}
-    	
-	}
-	public int VerschilInDagen() throws Exception
-	{
-		Calendar calendar1 = cal;
-		Calendar calendar2 = new GregorianCalendar();
-    	if(calendar1.before(calendar2))
-    	{
-    		int dagen = 0;  
-    		while (calendar1.before(calendar2)) 
-    		{  
-    			calendar1.add(Calendar.DAY_OF_MONTH, 1);  
-    			dagen++;  
-    		}  
-    		return dagen;  
-    	}
-    	
-    	else
-    	{
-    		int dagen = 0;  
-    		while (calendar2.before(calendar1)) 
-    		{  
-    			calendar2.add(Calendar.DAY_OF_MONTH, 1);  
-    			dagen++;  
-    		}  
-    		return dagen; 
-    	}
-	}   
-	public int VerschilInMaanden() throws Exception
-	{
-		Calendar calendar1 = cal;
-		Calendar calendar2 = new GregorianCalendar();
-    	if(calendar1.before(calendar2))
-    	{
-    		int maanden = 0;  
-    		while (calendar1.before(calendar2)) 
-    		{  
-    			calendar1.add(Calendar.MONTH, 1);  
-    			maanden++;  
-    		}  
-    		return maanden;  
-    	}
-    	
-    	else
-    	{
-    		int maanden = 0;  
-    		while (calendar2.before(calendar1)) 
-    		{  
-    			calendar2.add(Calendar.MONTH, 1);  
-    			maanden++;  
-    		}  
-    		return maanden; 
-    	}
-	}
-	public int VerschilInJaren() throws Exception
-	{
-		Calendar calendar1 = cal;
-		Calendar calendar2 = new GregorianCalendar();
-    	if(calendar1.before(calendar2))
-    	{
-    		int jaren = 0;  
-    		while (calendar1.before(calendar2)) 
-    		{  
-    			calendar1.add(Calendar.YEAR, 1);  
-    			jaren++;  
-    		}  
-    		return jaren;  
-    	}
-    	
-    	else
-    	{
-    		int jaren = 0;  
-    		while (calendar2.before(calendar1)) 
-    		{  
-    			calendar2.add(Calendar.YEAR, 1);  
-    			jaren++;  
-    		}  
-    		return jaren; 
-    	} 
-	}
-	public void VeranderDatum(int verandering) throws Exception
-	{
-		if(setDatum(verandering,cal.get(Calendar.MONTH)+1,cal.get(Calendar.YEAR)))
-		{
-			cal.set(Calendar.DAY_OF_MONTH,verandering);
-			System.out.println("Verwerkte datum : "+getDatumInEuropeesFormaat());
-		}
-		else
-		{
-			System.out.println("Er is een fout opgetreden");
-		}
-	}
-	public GregorianDatum VeranderDatumNO(int verandering) throws Exception
-	{
-		if(setDatum(verandering,cal.get(Calendar.MONTH)+1,cal.get(Calendar.YEAR)))
-		{
-			GregorianDatum dat = new GregorianDatum(verandering,cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH));
-			return (dat);
-		}
-		else
-		{
-			System.out.println("Er is een fout opgetreden");
-			return null;
-		}	
-	}
-	public String NaarString() throws Exception
-	{
+		String string = null;
+		try{
 		String maandstring = null;
 		switch(cal.get(Calendar.MONTH)+1)
 		{
@@ -370,9 +234,165 @@ public static void main(String[] args) throws Exception
 			break;
 		case 12: maandstring = "december";
 			break;
-			
 		}
-		return cal.get(Calendar.DAY_OF_MONTH) +" "+ maandstring +" "+ cal.get(Calendar.YEAR);
-		
+		string = cal.get(Calendar.DAY_OF_MONTH) +" "+ maandstring +" "+ cal.get(Calendar.YEAR);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return string;
 	}
+	
+	
+	//Methode bepaalt of datum kleiner is dan huidige datum
+	public Boolean kleinerDan(Date d1) throws Exception
+	{
+		Boolean test = false;
+		try{
+		Calendar calendar1 = Calendar.getInstance();
+		calendar1.setTime(d1);
+		Calendar calendar2 = new GregorianCalendar();
+    	if(cal.before(calendar2))
+    	{
+    		test = true;
+    	}
+    	
+    	else
+    	{
+    		test = false;
+    	}
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+    	return test;
+	}
+	
+	
+	//Methode bepaalt het verschil in dagen tusssen parameter en huidige datum
+	public int verschilInDagen(Date d1) throws Exception
+	{
+		int dagen = 0; 
+		try{
+		Calendar calendar1 = Calendar.getInstance();
+		calendar1.setTime(d1);
+		Calendar calendar2 = new GregorianCalendar();
+    	if(calendar1.before(calendar2))
+    	{
+    		dagen = 0;  
+    		while (calendar1.before(calendar2)) 
+    		{  
+    			calendar1.add(Calendar.DAY_OF_MONTH, 1);  
+    			dagen++;  
+    		}  
+    	}
+    	
+    	else
+    	{
+    		dagen = 0;  
+    		while (calendar2.before(calendar1)) 
+    		{  
+    			calendar2.add(Calendar.DAY_OF_MONTH, 1);  
+    			dagen++;  
+    		}      		
+    	}
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return dagen; 
+	}   
+	//Methode bepaalt het verschil in maanden tusssen parameter en huidige datum
+	public int verschilInMaanden(Date d1) throws Exception
+	{
+		int maanden = 0;  
+		try{
+		Calendar calendar1 = Calendar.getInstance();
+		calendar1.setTime(d1);
+		Calendar calendar2 = new GregorianCalendar();
+    	if(calendar1.before(calendar2))
+    	{
+    		maanden = 0;  
+    		while (calendar1.before(calendar2)) 
+    		{  
+    			calendar1.add(Calendar.MONTH, 1);  
+    			maanden++;  
+    		}   
+    	}
+    	
+    	else
+    	{
+    		maanden = 0;  
+    		while (calendar2.before(calendar1)) 
+    		{  
+    			calendar2.add(Calendar.MONTH, 1);  
+    			maanden++;  
+    		}  
+    	}
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return maanden; 
+	}
+	//Methode bepaalt het verschil in jaren tusssen parameter en huidige datum
+	public int verschilInJaren(Date d1) throws Exception
+	{
+		int jaren = 0;  
+		try{
+		Calendar calendar1 = Calendar.getInstance();
+		calendar1.setTime(d1);
+		Calendar calendar2 = new GregorianCalendar();
+    	if(calendar1.before(calendar2))
+    	{
+    		jaren = 0;  
+    		while (calendar1.before(calendar2)) 
+    		{  
+    			calendar1.add(Calendar.YEAR, 1);  
+    			jaren++;  
+    		}   
+    	}
+    	
+    	else
+    	{
+    		jaren = 0;  
+    		while (calendar2.before(calendar1)) 
+    		{  
+    			calendar2.add(Calendar.YEAR, 1);  
+    			jaren++;  
+    		}  
+    	} 
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return jaren; 
+	}
+	
+	
+	//Methode verhoogt of verlaagt datum met een aantal dagen
+	public void veranderDatum(int verandering) throws Exception
+	{   
+		try{
+		cal.add(Calendar.DAY_OF_MONTH, verandering);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	//Mehode verhoogt of verlaagt een nieuw datum met een aantal dagen
+	public GregorianDatum veranderDatum2(int verandering) throws Exception
+	{
+		GregorianDatum dat = null;
+		try{
+		cal.add(Calendar.DAY_OF_MONTH, verandering);
+		dat = new GregorianDatum(cal.get(Calendar.DAY_OF_MONTH),cal.get(Calendar.MONTH),cal.get(Calendar.YEAR));
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return dat;
+	}
+	
+	
 }
